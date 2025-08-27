@@ -1,3 +1,10 @@
+# rubric-js-live-editor
+
+An app generated in one-shot by Cursor configured with [Rubric](https://github.com/graciolli-f/Rubric).
+
+The prompt was: 
+_Make a react app that shows a javascript editor and live rendering for that code in a canvas, side-by-side on desktop and up-by-down on mobile._
+
 # JavaScript Live Editor
 
 A React application that provides a JavaScript editor with live canvas rendering, featuring side-by-side layout on desktop and stacked layout on mobile.

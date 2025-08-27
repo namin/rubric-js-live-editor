@@ -101,10 +101,17 @@ export const useCodeExecution = ({
     }
   }, [code, canvas, width, height])
 
-  // Auto-execute when code changes
+  // Execute when code changes, canvas becomes available, or dimensions change
   useEffect(() => {
-    executeCode()
-  }, [executeCode])
+    if (canvas && code.trim()) {
+      // Small delay to ensure canvas is fully mounted
+      const timeoutId = setTimeout(() => {
+        executeCode()
+      }, 10)
+      
+      return () => clearTimeout(timeoutId)
+    }
+  }, [canvas, code, width, height, executeCode])
 
   return {
     error,

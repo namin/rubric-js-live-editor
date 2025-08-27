@@ -1,0 +1,64 @@
+module UseCodeExecution {
+  @ "Custom hook for safe JavaScript code execution in canvas context"
+  @ "Handles sandboxing, error management, and canvas drawing operations"
+
+  type: "hook"
+  
+  location: "src/hooks/useCodeExecution.ts"
+  
+  interface {
+    @ "Hook for code execution with error handling"
+    public useCodeExecution(props: {
+      code: string,
+      canvas: HTMLCanvasElement?,
+      width: number,
+      height: number
+    }) -> {
+      error: string?,
+      isExecuting: boolean,
+      executeCode: () -> void
+    }
+  }
+  
+  state {
+    @ "Hook internal state"
+    private error: string?
+    private isExecuting: boolean
+  }
+  
+  imports {
+    @ "React hooks"
+    allow "react" as external
+    
+    @ "Cannot import components"
+    deny imports ["../components/*"]
+    
+    @ "Cannot import stores directly - use via parameters"
+    deny imports ["../stores/*"]
+  }
+  
+  constraints {
+    @ "Hook-specific patterns"
+    require pattern.react_hooks_rules
+    require pattern.cleanup_effects
+    
+    @ "Safe code execution"
+    require pattern.safe_eval
+    require pattern.error_boundary
+    
+    @ "Limited side effects - only canvas operations"
+    allow io.canvas.*
+    deny io.network.*
+    deny io.localStorage.*
+    
+    @ "Console for debugging in dev"
+    allow io.console.* when NODE_ENV="development"
+    
+    @ "Export restrictions"
+    deny exports ["_*"]
+    
+    @ "Keep focused"
+    warn file.lines > 150
+    deny file.lines > 200
+  }
+}

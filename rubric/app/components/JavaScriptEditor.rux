@@ -1,0 +1,64 @@
+module JavaScriptEditor {
+  @ "Pure presentation component for JavaScript code editing"
+  @ "Props-only, uses Monaco editor for syntax highlighting and editing"
+
+  type: "presentation"
+  
+  location: "src/components/JavaScriptEditor.tsx"
+  
+  interface {
+    @ "Props interface"
+    public JavaScriptEditor(props: {
+      code: string,
+      onChange: (code: string) -> void,
+      className?: string,
+      readOnly?: boolean
+    }) -> JSX.Element
+  }
+  
+  state {
+    @ "No local state - controlled component"
+  }
+  
+  imports {
+    @ "React only"
+    allow "react" as external
+    
+    @ "Monaco editor for JavaScript editing"
+    allow "@monaco-editor/react" as external
+    
+    @ "UI utilities"
+    allow "clsx" as external
+    
+    @ "Styles"
+    allow "../styles/JavaScriptEditor.module.css" as styles
+    
+    @ "No stores, services, or data access"
+    deny imports ["../stores/*", "../services/*", "../data/*", "../hooks/*"]
+  }
+  
+  constraints {
+    @ "No side effects"
+    deny io.*
+    
+    @ "No async operations"
+    deny pattern.async_operations
+    
+    @ "Props validation"
+    require pattern.prop_types_or_typescript
+    
+    @ "Export restrictions"
+    deny exports ["_*"]
+    
+    @ "Keep it simple"
+    warn file.lines > 100
+    deny file.lines > 150
+    
+    @ "Performance"
+    require pattern.memo_if_expensive
+    
+    @ "Accessibility"
+    require pattern.aria_labels
+    require pattern.keyboard_navigation
+  }
+}

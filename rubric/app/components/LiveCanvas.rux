@@ -1,0 +1,71 @@
+module LiveCanvas {
+  @ "Pure presentation component for live JavaScript code execution and rendering"
+  @ "Props-only, executes code safely in canvas context"
+
+  type: "presentation"
+  
+  location: "src/components/LiveCanvas.tsx"
+  
+  interface {
+    @ "Props interface"
+    public LiveCanvas(props: {
+      code: string,
+      className?: string,
+      width?: number,
+      height?: number
+    }) -> JSX.Element
+  }
+  
+  state {
+    @ "Local state for canvas management"
+    private canvasRef: RefObject<HTMLCanvasElement>
+    private error: string?
+  }
+  
+  imports {
+    @ "React only"
+    allow "react" as external
+    
+    @ "UI utilities"
+    allow "clsx" as external
+    
+    @ "Custom hooks for business logic"
+    allow "../hooks/useCodeExecution" as {useCodeExecution}
+    
+    @ "Styles"
+    allow "../styles/LiveCanvas.module.css" as styles
+    
+    @ "No stores, services, or data access"
+    deny imports ["../stores/*", "../services/*", "../data/*"]
+  }
+  
+  constraints {
+    @ "Limited side effects - only canvas drawing"
+    allow io.canvas.*
+    deny io.network.*
+    deny io.localStorage.*
+    
+    @ "Safe code execution"
+    require pattern.safe_eval
+    require pattern.error_boundary
+    
+    @ "Props validation"
+    require pattern.prop_types_or_typescript
+    
+    @ "Export restrictions"
+    deny exports ["_*"]
+    
+    @ "Keep it simple"
+    warn file.lines > 150
+    deny file.lines > 200
+    
+    @ "Performance"
+    require pattern.memo_if_expensive
+    
+    @ "Accessibility"
+    require pattern.aria_labels
+    
+    @ "Canvas cleanup"
+    require pattern.cleanup_effects
+  }
+}

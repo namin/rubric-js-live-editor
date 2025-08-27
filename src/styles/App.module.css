@@ -1,0 +1,57 @@
+/* App component styles with responsive layout */
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.editorPanel {
+  flex: 1;
+  min-width: 0;
+  border-right: 2px solid #e0e0e0;
+  background-color: #fafafa;
+}
+
+.canvasPanel {
+  flex: 1;
+  min-width: 0;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobile responsive - stack vertically */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+  
+  .container {
+    flex-direction: column;
+  }
+  
+  .editorPanel {
+    flex: 1;
+    border-right: none;
+    border-bottom: 2px solid #e0e0e0;
+    max-height: 50vh;
+  }
+  
+  .canvasPanel {
+    flex: 1;
+    min-height: 50vh;
+  }
+}
+
+/* Accessibility */
+.app:focus-within {
+  outline: 2px solid #007acc;
+  outline-offset: 2px;
+}

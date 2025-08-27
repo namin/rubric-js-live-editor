@@ -1,0 +1,73 @@
+module CodeStore {
+  @ "State management for JavaScript code sharing between editor and canvas"
+  @ "Manages code state, execution, and error handling"
+
+  type: "store"
+  
+  location: "src/stores/code-store.ts"
+  
+  interface {
+    @ "Zustand store hook"
+    public useCodeStore() -> {
+      @ "State"
+      code: string,
+      isExecuting: boolean,
+      error: string?,
+      lastExecutedCode: string?,
+      
+      @ "Actions"
+      setCode: (code: string) -> void,
+      executeCode: () -> void,
+      clearError: () -> void,
+      reset: () -> void
+    }
+  }
+  
+  state {
+    @ "Internal state shape"
+    private _code: string
+    private _isExecuting: boolean
+    private _error: string?
+    private _lastExecutedCode: string?
+  }
+  
+  imports {
+    @ "State management library"
+    allow "zustand" as external
+    allow "immer" as external
+    
+    @ "Cannot import data layer directly"
+    deny imports ["../data/*"]
+    
+    @ "Cannot import components"
+    deny imports ["../components/*"]
+  }
+  
+  constraints {
+    @ "State management patterns"
+    require pattern.immutable_updates
+    require pattern.action_error_handling
+    
+    @ "No business logic - keep simple"
+    deny pattern.complex_calculations
+    
+    @ "No API calls"
+    deny io.network.*
+    
+    @ "Local storage for code persistence"
+    allow io.localStorage.* @ "For saving user code"
+    
+    @ "DevTools support"
+    allow io.console.* when NODE_ENV="development"
+    
+    @ "Performance"
+    require pattern.selector_memoization
+    
+    @ "Export restrictions"
+    deny exports ["_*"]
+    
+    @ "Size constraints"
+    warn file.lines > 100
+    deny file.lines > 200
+  }
+}

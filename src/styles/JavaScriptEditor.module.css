@@ -1,0 +1,45 @@
+/* JavaScript Editor component styles */
+.editor {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.editorContainer {
+  height: 100%;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.editorLabel {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+/* Error state */
+.error {
+  padding: 16px;
+  background-color: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 4px;
+  color: #c53030;
+  font-family: monospace;
+}
+
+/* Focus management */
+.editor:focus-within {
+  outline: 2px solid #007acc;
+  outline-offset: 2px;
+}

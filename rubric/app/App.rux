@@ -1,0 +1,63 @@
+module App {
+  @ "Main application container that orchestrates the JavaScript live editor"
+  @ "Manages responsive layout and coordinates editor and canvas components"
+
+  type: "container"
+  
+  location: "src/App.tsx"
+  
+  interface {
+    @ "Default export for the main app component"
+    public default App() -> JSX.Element
+  }
+  
+  state {
+    @ "No local state - uses store for code management"
+  }
+  
+  imports {
+    @ "React and UI libraries"
+    allow "react" as external
+    
+    @ "Child components for composition"
+    allow "./components/JavaScriptEditor" as {JavaScriptEditor}
+    allow "./components/LiveCanvas" as {LiveCanvas}
+    
+    @ "Store for shared code state"
+    allow "./stores/code-store" as {useCodeStore}
+    
+    @ "Styles"
+    allow "./styles/App.module.css" as styles
+    
+    @ "Cannot import services or data layers directly"
+    deny imports ["./services/*", "./data/*"]
+  }
+  
+  constraints {
+    @ "No direct API calls"
+    deny io.network.*
+    
+    @ "No direct storage access"
+    deny io.localStorage.*
+    
+    @ "Limited console usage"
+    warn io.console.*
+    
+    @ "No business logic"
+    deny pattern.business_logic
+    
+    @ "Must handle loading and error states from stores"
+    require pattern.error_boundary
+    require pattern.loading_state
+    
+    @ "Accessibility requirements"
+    require pattern.aria_labels
+    
+    @ "Responsive design requirements"
+    require pattern.responsive_design
+    
+    @ "Size constraints"
+    warn file.lines > 200
+    deny file.lines > 300
+  }
+}

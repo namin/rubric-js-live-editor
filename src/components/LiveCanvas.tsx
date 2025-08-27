@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import clsx from 'clsx'
 import { useCodeExecution } from '../hooks/useCodeExecution'
 import styles from '../styles/LiveCanvas.module.css'
@@ -16,11 +16,16 @@ export const LiveCanvas = React.memo<LiveCanvasProps>(({
   width = 400,
   height = 300
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
+  
+  // Callback ref to capture canvas when it mounts
+  const canvasRef = React.useCallback((node: HTMLCanvasElement | null) => {
+    setCanvas(node)
+  }, [])
   
   const { error } = useCodeExecution({
     code,
-    canvas: canvasRef.current,
+    canvas,
     width,
     height
   })

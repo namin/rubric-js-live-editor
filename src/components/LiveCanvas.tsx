@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import clsx from 'clsx'
 import { useCodeExecution } from '../hooks/useCodeExecution'
 import styles from '../styles/LiveCanvas.module.css'

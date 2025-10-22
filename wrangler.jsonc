@@ -1,5 +1,5 @@
 {
-  "name": "worker-name",
+  "name": "rubric-js-live-editor",
   "compatibility_date": "2025-10-22",
   "assets": {
     "directory": "./dist"
